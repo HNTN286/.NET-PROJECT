@@ -1,0 +1,54 @@
+﻿@model IEnumerable<TrungTamDaoTao.Models.KhoaHoc>
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Chào mừng đến với Trung tâm Đào tạo</h1>
+    <p>Chúng tôi cung cấp các khóa học chất lượng cao với đội ngũ giảng viên chuyên nghiệp.</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+        <h2 class="text-center mb-4">Khóa học sắp khai giảng</h2>
+        
+        @if (Model.Any())
+        {
+            <div class="row">
+                @foreach (var khoaHoc in Model)
+                {
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">@khoaHoc.TenKhoaHoc</h5>
+                                <p class="card-text">
+                                    <strong>Giảng viên:</strong> @khoaHoc.GiangVien<br />
+                                    <strong>Khai giảng:</strong> @khoaHoc.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")<br />
+                                    <strong>Học phí:</strong> @String.Format("{0:N0}", khoaHoc.HocPhi) VNĐ<br />
+                                    <strong>Số lượng học viên tối đa:</strong> @khoaHoc.SoLuongHocVienToiDa
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@khoaHoc.MaKhoaHoc" class="btn btn-primary">Chi tiết</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a asp-controller="KhoaHoc" asp-action="DangKy" asp-route-id="@khoaHoc.MaKhoaHoc" class="btn btn-success">Đăng ký</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                Hiện không có khóa học nào sắp khai giảng.
+            </div>
+        }
+        
+        <div class="text-center mt-4">
+            <a asp-controller="KhoaHoc" asp-action="Index" class="btn btn-outline-primary">Xem tất cả khóa học</a>
+        </div>
+    </div>
+</div>

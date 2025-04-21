@@ -1,0 +1,65 @@
+@model TrungTamDaoTao.Models.KhoaHoc
+
+@{
+    ViewData["Title"] = "Thêm khóa học mới";
+}
+
+<div class="container mt-4">
+    <h2>Thêm khóa học mới</h2>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5>Thông tin khóa học</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="MaKhoaHoc" class="control-label">Mã khóa học</label>
+                    <input asp-for="MaKhoaHoc" class="form-control" />
+                    <span asp-validation-for="MaKhoaHoc" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="TenKhoaHoc" class="control-label">Tên khóa học</label>
+                    <input asp-for="TenKhoaHoc" class="form-control" />
+                    <span asp-validation-for="TenKhoaHoc" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="GiangVien" class="control-label">Giảng viên</label>
+                    <input asp-for="GiangVien" class="form-control" />
+                    <span asp-validation-for="GiangVien" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="ThoiGianKhaiGiang" class="control-label">Thời gian khai giảng</label>
+                    <input asp-for="ThoiGianKhaiGiang" class="form-control" type="date" />
+                    <span asp-validation-for="ThoiGianKhaiGiang" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="HocPhi" class="control-label">Học phí (VNĐ)</label>
+                    <input asp-for="HocPhi" class="form-control" />
+                    <span asp-validation-for="HocPhi" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="SoLuongHocVienToiDa" class="control-label">Số lượng học viên tối đa</label>
+                    <input asp-for="SoLuongHocVienToiDa" class="form-control" />
+                    <span asp-validation-for="SoLuongHocVienToiDa" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+                    <button type="submit" class="btn btn-primary">Thêm khóa học</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

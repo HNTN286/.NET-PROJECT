@@ -1,0 +1,67 @@
+@model IEnumerable<TrungTamDaoTao.Models.KhoaHoc>
+
+@{
+    ViewData["Title"] = "Danh sách khóa học";
+}
+
+<div class="container mt-4">
+    <h2>Danh sách khóa học</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (User.IsInRole("QuanTriVien"))
+    {
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Thêm khóa học mới</a>
+        </p>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.MaKhoaHoc)</th>
+                    <th>@Html.DisplayNameFor(model => model.TenKhoaHoc)</th>
+                    <th>@Html.DisplayNameFor(model => model.GiangVien)</th>
+                    <th>@Html.DisplayNameFor(model => model.ThoiGianKhaiGiang)</th>
+                    <th>@Html.DisplayNameFor(model => model.HocPhi)</th>
+                    <th>@Html.DisplayNameFor(model => model.SoLuongHocVienToiDa)</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.MaKhoaHoc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TenKhoaHoc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.GiangVien)</td>
+                        <td>@item.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</td>
+                        <td>@item.HocPhi.ToString("N0") VNĐ</td>
+                        <td>@Html.DisplayFor(modelItem => item.SoLuongHocVienToiDa)</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.MaKhoaHoc" class="btn btn-info btn-sm">Chi tiết</a>
+                            @if (User.IsInRole("QuanTriVien"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.MaKhoaHoc" class="btn btn-warning btn-sm">Sửa</a>
+                                <a asp-action="Delete" asp-route-id="@item.MaKhoaHoc" class="btn btn-danger btn-sm">Xóa</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

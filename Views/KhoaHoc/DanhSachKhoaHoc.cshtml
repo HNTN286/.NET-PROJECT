@@ -1,0 +1,65 @@
+@model IEnumerable<TrungTamDaoTao.Controllers.KhoaHocViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách khóa học";
+}
+
+<div class="container mt-4">
+    <h2>Danh sách khóa học</h2>
+    
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5>@item.TenKhoaHoc</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Giảng viên:</strong> @item.GiangVien</p>
+                        <p><strong>Khai giảng:</strong> @item.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</p>
+                        <p><strong>Học phí:</strong> @item.HocPhi.ToString("N0") VNĐ</p>
+                        <p><strong>Đã đăng ký:</strong> @item.SoLuongDangKy / @item.SoLuongHocVienToiDa</p>
+                        
+                        <div class="progress mb-3">
+                            @{ 
+                                var percent = (int)((double)item.SoLuongDangKy / item.SoLuongHocVienToiDa * 100);
+                                var colorClass = percent >= 100 ? "bg-danger" : 
+                                                percent >= 75 ? "bg-warning" : "bg-success";
+                            }
+                            <div class="progress-bar @colorClass" role="progressbar" style="width: @percent%;" 
+                                 aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100">
+                                @percent%
+                            </div>
+                        </div>
+                        
+                        @if (item.SoLuongDangKy >= item.SoLuongHocVienToiDa)
+                        {
+                            <div class="badge bg-danger mb-2">Đã đầy</div>
+                        }
+                        else if (item.ThoiGianKhaiGiang < DateTime.Now)
+                        {
+                            <div class="badge bg-warning mb-2">Đã khai giảng</div>
+                        }
+                        else
+                        {
+                            <div class="badge bg-success mb-2">Đang nhận đăng ký</div>
+                        }
+                    </div>
+                    <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                            <a asp-action="Details" asp-route-id="@item.MaKhoaHoc" class="btn btn-info btn-sm">Chi tiết</a>
+                            @if (User.Identity.IsAuthenticated && !User.IsInRole("QuanTriVien"))
+                            {
+                                @if (item.SoLuongDangKy < item.SoLuongHocVienToiDa && item.ThoiGianKhaiGiang > DateTime.Now)
+                                {
+                                    <a asp-controller="DangKyKhoaHoc" asp-action="DangKy" asp-route-id="@item.MaKhoaHoc" class="btn btn-primary btn-sm">Đăng ký</a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
