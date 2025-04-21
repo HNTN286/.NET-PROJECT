@@ -235,3 +235,4 @@ E:\Quanlytrungtamdaotao\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFra
 E:\Quanlytrungtamdaotao\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
 E:\Quanlytrungtamdaotao\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
 E:\Quanlytrungtamdaotao\bin\Debug\net9.0\BCrypt.Net-Next.dll
+E:\Quanlytrungtamdaotao\obj\Debug\net9.0\Quanlytrungtamdaotao.sourcelink.json

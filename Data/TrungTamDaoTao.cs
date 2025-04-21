@@ -28,23 +28,6 @@ namespace TrungTamDaoTao.Data
                 .HasOne(d => d.KhoaHoc)
                 .WithMany(k => k.DangKyKhoaHoc)
                 .HasForeignKey(d => d.MaKhoaHoc);
-
-            // Seed dữ liệu mẫu (nếu cần)
-            // Admin account
-            modelBuilder.Entity<HocVien>().HasData(
-                new HocVien
-                {
-                    MaHocVien = "ADMIN001",
-                    HoTen = "Admin",
-                    NgaySinh = new DateTime(1990, 1, 1),
-                    SoDienThoai = "0123456789",
-                    Email = "admin@trungtamdaotao.com",
-                    TaiKhoan = "admin",
-                    // Mật khẩu: admin123 (đã hash)
-                    PasswordHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
-                    VaiTro = "QuanTriVien"
-                }
-            );
         }
     }
 }

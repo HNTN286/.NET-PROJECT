@@ -140,7 +140,8 @@ namespace TrungTamDaoTao.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                return RedirectToAction("Index", "Home");
+                // return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Account");
             }
             return View(model);
         }

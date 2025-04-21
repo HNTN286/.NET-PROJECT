@@ -1,0 +1,141 @@
+<!-- Views/Admin/DoanhThuTheoKhoaHoc.cshtml -->
+@model TrungTamDaoTao.ViewModels.DoanhThuTheoKhoaHocViewModel
+@{
+    ViewData["Title"] = "Thống kê doanh thu theo khóa học";
+}
+
+<div class="container py-4">
+    <h1 class="mb-4">Thống kê doanh thu theo khóa học</h1>
+
+    <!-- Form lọc theo thời gian -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="tuNgay" class="form-label">Từ ngày</label>
+                    <input type="date" class="form-control" id="tuNgay" name="tuNgay" value="@Model.TuNgay.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-4">
+                    <label for="denNgay" class="form-label">Đến ngày</label>
+                    <input type="date" class="form-control" id="denNgay" name="denNgay" value="@Model.DenNgay.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-4 d-flex">
+                    <button type="submit" class="btn btn-primary me-2">Lọc dữ liệu</button>
+                    <a asp-action="DoanhThuTheoKhoaHoc" class="btn btn-outline-secondary">Xóa bộ lọc</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hiển thị tổng doanh thu -->
+    <div class="alert alert-info mb-4">
+        <h4 class="mb-0">Tổng doanh thu: @String.Format("{0:N0}", Model.TongDoanhThu) VNĐ</h4>
+        <p class="mb-0">Thời gian: từ @Model.TuNgay.ToString("dd/MM/yyyy") đến @Model.DenNgay.ToString("dd/MM/yyyy")</p>
+    </div>
+
+    <!-- Biểu đồ -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Biểu đồ doanh thu theo khóa học</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="doanhThuChart" width="100%" height="50"></canvas>
+        </div>
+    </div>
+
+    <!-- Bảng dữ liệu -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Chi tiết doanh thu theo khóa học</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.DoanhThuKhoaHoc.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã khóa học</th>
+                                <th>Tên khóa học</th>
+                                <th class="text-center">Số lượng đăng ký</th>
+                                <th class="text-end">Doanh thu</th>
+                                <th class="text-center">Tỷ lệ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.DoanhThuKhoaHoc)
+                            {
+                                <tr>
+                                    <td>@item.MaKhoaHoc</td>
+                                    <td>@item.TenKhoaHoc</td>
+                                    <td class="text-center">@item.SoLuongDangKy</td>
+                                    <td class="text-end">@String.Format("{0:N0}", item.TongDoanhThu) VNĐ</td>
+                                    <td class="text-center">
+                                        @if (Model.TongDoanhThu > 0)
+                                        {
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" style="width: @(item.TongDoanhThu * 100 / Model.TongDoanhThu)%;" 
+                                                     aria-valuenow="@(item.TongDoanhThu * 100 / Model.TongDoanhThu)" aria-valuemin="0" aria-valuemax="100">
+                                                    @((item.TongDoanhThu * 100 / Model.TongDoanhThu).ToString("0.0"))%
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span>0%</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    Không có dữ liệu doanh thu nào trong khoảng thời gian này.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Khởi tạo biểu đồ
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('doanhThuChart').getContext('2d');
+            var labels = [@Html.Raw(string.Join(",", Model.DoanhThuKhoaHoc.Select(x => $"'{x.TenKhoaHoc}'")))];
+            var doanhThuData = [@string.Join(",", Model.DoanhThuKhoaHoc.Select(x => x.TongDoanhThu))];
+            
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu (VNĐ)',
+                        data: doanhThuData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Doanh thu theo từng khóa học'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

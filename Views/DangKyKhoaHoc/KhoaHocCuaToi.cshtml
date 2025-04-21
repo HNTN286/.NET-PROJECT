@@ -1,0 +1,82 @@
+@model IEnumerable<TrungTamDaoTao.Models.DangKyKhoaHoc>
+
+@{
+    ViewData["Title"] = "Khóa học của tôi";
+}
+
+<h1>Khóa học của tôi</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="Index" class="btn btn-primary">Danh sách khóa học</a>
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Danh sách khóa học đã đăng ký</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã khóa học</th>
+                            <th>Tên khóa học</th>
+                            <th>Giảng viên</th>
+                            <th>Thời gian khai giảng</th>
+                            <th>Học phí</th>
+                            <th>Ngày đăng ký</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="@(item.DaHuy ? "table-secondary" : "")">
+                                <td>@item.KhoaHoc.MaKhoaHoc</td>
+                                <td>@item.KhoaHoc.TenKhoaHoc</td>
+                                <td>@item.KhoaHoc.GiangVien</td>
+                                <td>@item.KhoaHoc.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</td>
+                                <td>@item.KhoaHoc.HocPhi.ToString("N0") VNĐ</td>
+                                <td>@item.NgayDangKy.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @if (item.DaHuy)
+                                    {
+                                        <span class="badge bg-secondary">Đã hủy</span>
+                                        <div>Ngày hủy: @item.NgayHuy?.ToString("dd/MM/yyyy HH:mm")</div>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Đã đăng ký</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!item.DaHuy && item.KhoaHoc.ThoiGianKhaiGiang > DateTime.Now)
+                                    {
+                                        <a asp-action="Huy" asp-route-id="@item.Id" class="btn btn-danger">Hủy đăng ký</a>
+                                    }
+                                    <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@item.KhoaHoc.MaKhoaHoc" class="btn btn-info">Chi tiết</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+@model IEnumerable<TrungTamDaoTao.Models.HocVien>
+
+@{
+    ViewData["Title"] = "Danh sách học viên";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h4 class="mb-4">Danh sách học viên</h4>
+                
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+                
+                <p>
+                    <a asp-action="Create" class="btn btn-success">Thêm mới học viên</a>
+                </p>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.MaHocVien)</th>
+                                <th>@Html.DisplayNameFor(model => model.HoTen)</th>
+                                <th>@Html.DisplayNameFor(model => model.NgaySinh)</th>
+                                <th>@Html.DisplayNameFor(model => model.SoDienThoai)</th>
+                                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                                <th>@Html.DisplayNameFor(model => model.TaiKhoan)</th>
+                                <th>@Html.DisplayNameFor(model => model.VaiTro)</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.MaHocVien)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.HoTen)</td>
+                                    <td>@item.NgaySinh.ToString("dd/MM/yyyy")</td>
+                                    <td>@Html.DisplayFor(modelItem => item.SoDienThoai)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.TaiKhoan)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.VaiTro)</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@item.MaHocVien" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-edit"></i> Sửa
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.MaHocVien" class="btn btn-info btn-sm">
+                                                <i class="fa fa-info-circle"></i> Chi tiết
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.MaHocVien" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-trash"></i> Xóa
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('table').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Vietnamese.json'
+                }
+            });
+        });
+    </script>
+}

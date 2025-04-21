@@ -1,0 +1,161 @@
+<!-- Views/Admin/Dashboard.cshtml -->
+@model TrungTamDaoTao.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard - Tổng quan hệ thống";
+}
+
+<div class="container py-4">
+    <h1 class="mb-4">Dashboard - Tổng quan hệ thống</h1>
+
+    <!-- Card thông tin tổng quan -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Tổng số khóa học</h5>
+                    <h2 class="card-text">@Model.TongSoKhoaHoc</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Tổng số học viên</h5>
+                    <h2 class="card-text">@Model.TongSoHocVien</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Tổng số đăng ký</h5>
+                    <h2 class="card-text">@Model.TongSoDangKy</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Tổng doanh thu</h5>
+                    <h2 class="card-text">@String.Format("{0:N0}", Model.TongDoanhThu) VNĐ</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Khóa học sắp khai giảng -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Khóa học sắp khai giảng</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.KhoaHocSapKhaiGiang.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Tên khóa học</th>
+                                        <th>Ngày khai giảng</th>
+                                        <th>Số lượng đăng ký</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var khoaHoc in Model.KhoaHocSapKhaiGiang)
+                                    {
+                                        <tr>
+                                            <td>@khoaHoc.TenKhoaHoc</td>
+                                            <td>@khoaHoc.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</td>
+                                            <td>@khoaHoc.DangKyKhoaHoc.Count(dk => !dk.DaHuy) / @khoaHoc.SoLuongHocVienToiDa</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Không có khóa học nào sắp khai giảng</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Đăng ký gần đây -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Đăng ký gần đây</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.DangKyGanDay.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Học viên</th>
+                                        <th>Khóa học</th>
+                                        <th>Ngày đăng ký</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var dangKy in Model.DangKyGanDay)
+                                    {
+                                        <tr class="@(dangKy.DaHuy ? "table-danger" : "")">
+                                            <td>@dangKy.HocVien.HoTen</td>
+                                            <td>@dangKy.KhoaHoc.TenKhoaHoc</td>
+                                            <td>@dangKy.NgayDangKy.ToString("dd/MM/yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Không có đăng ký nào gần đây</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Thống kê nhanh</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <a asp-controller="Admin" asp-action="DoanhThuTheoKhoaHoc" class="btn btn-outline-primary btn-lg w-100 mb-2">
+                                <i class="bi bi-bar-chart"></i> Thống kê doanh thu theo khóa học
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-controller="Admin" asp-action="DoanhThuTheoThoiGian" class="btn btn-outline-success btn-lg w-100 mb-2">
+                                <i class="bi bi-calendar3"></i> Thống kê doanh thu theo thời gian
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-controller="DangKyKhoaHoc" asp-action="ThongKe" class="btn btn-outline-info btn-lg w-100 mb-2">
+                                <i class="bi bi-people"></i> Thống kê đăng ký
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Khởi tạo Chart.js nếu cần
+    </script>
+}

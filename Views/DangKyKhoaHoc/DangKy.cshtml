@@ -1,0 +1,47 @@
+@model TrungTamDaoTao.Models.KhoaHoc
+
+@{
+    ViewData["Title"] = "Đăng ký khóa học";
+}
+
+<h1>Xác nhận đăng ký khóa học</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Thông tin khóa học</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Mã khóa học</dt>
+                    <dd class="col-sm-8">@Model.MaKhoaHoc</dd>
+
+                    <dt class="col-sm-4">Tên khóa học</dt>
+                    <dd class="col-sm-8">@Model.TenKhoaHoc</dd>
+
+                    <dt class="col-sm-4">Giảng viên</dt>
+                    <dd class="col-sm-8">@Model.GiangVien</dd>
+
+                    <dt class="col-sm-4">Thời gian khai giảng</dt>
+                    <dd class="col-sm-8">@Model.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</dd>
+
+                    <dt class="col-sm-4">Học phí</dt>
+                    <dd class="col-sm-8">@Model.HocPhi.ToString("N0") VNĐ</dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <form asp-action="DangKy">
+                    <input type="hidden" asp-for="MaKhoaHoc" />
+                    <div class="form-group">
+                        <p class="text-danger">Lưu ý: Bạn có thể hủy đăng ký trước ngày khai giảng.</p>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Xác nhận đăng ký" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

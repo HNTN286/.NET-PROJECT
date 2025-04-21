@@ -1,0 +1,68 @@
+@model IEnumerable<TrungTamDaoTao.ViewModels.DangKyKhoaHocViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách khóa học";
+}
+
+<h1>Danh sách khóa học</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="KhoaHocCuaToi" class="btn btn-primary">Khóa học của tôi</a>
+</p>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">@item.TenKhoaHoc</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Giảng viên:</strong> @item.GiangVien</p>
+                    <p><strong>Khai giảng:</strong> @item.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</p>
+                    <p><strong>Học phí:</strong> @item.HocPhi.ToString("N0") VNĐ</p>
+                    <p>
+                        <strong>Số lượng học viên:</strong> 
+                        @item.SoLuongHocVienDaDangKy / @item.SoLuongHocVienToiDa
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: @((float)item.SoLuongHocVienDaDangKy / item.SoLuongHocVienToiDa * 100)%;" 
+                                 aria-valuenow="@item.SoLuongHocVienDaDangKy" aria-valuemin="0" aria-valuemax="@item.SoLuongHocVienToiDa">
+                                @((float)item.SoLuongHocVienDaDangKy / item.SoLuongHocVienToiDa * 100)%
+                            </div>
+                        </div>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    @if (item.ConChoTrong && item.ThoiGianKhaiGiang > DateTime.Now)
+                    {
+                        <a asp-action="DangKy" asp-route-id="@item.MaKhoaHoc" class="btn btn-success">Đăng ký</a>
+                    }
+                    else if (item.ThoiGianKhaiGiang <= DateTime.Now)
+                    {
+                        <button class="btn btn-secondary" disabled>Đã khai giảng</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary" disabled>Đã đầy</button>
+                    }
+                    <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@item.MaKhoaHoc" class="btn btn-info">Chi tiết</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
