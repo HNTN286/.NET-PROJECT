@@ -1,0 +1,151 @@
+@model TrungTamDaoTao.ViewModels.ChiTietKhoaHocDangKyViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đăng ký khóa học";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+<div class="container mt-4">
+    <h2>Chi tiết đăng ký: @Model.KhoaHoc.TenKhoaHoc</h2>
+    <hr />
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Thông tin khóa học</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Mã khóa học:</dt>
+                        <dd class="col-sm-8">@Model.KhoaHoc.MaKhoaHoc</dd>
+
+                        <dt class="col-sm-4">Tên khóa học:</dt>
+                        <dd class="col-sm-8">@Model.KhoaHoc.TenKhoaHoc</dd>
+
+                        <dt class="col-sm-4">Giảng viên:</dt>
+                        <dd class="col-sm-8">@Model.KhoaHoc.GiangVien</dd>
+
+                        <dt class="col-sm-4">Thời gian khai giảng:</dt>
+                        <dd class="col-sm-8">@Model.KhoaHoc.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</dd>
+
+                        <dt class="col-sm-4">Học phí:</dt>
+                        <dd class="col-sm-8">@Model.KhoaHoc.HocPhi.ToString("N0") VND</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Thống kê đăng ký</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="border rounded p-3 mb-3">
+                                <h3>@Model.TongSoDangKy</h3>
+                                <p class="mb-0">Tổng đăng ký</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="border rounded p-3 mb-3 bg-success text-white">
+                                <h3>@Model.SoDangKyHieuLuc</h3>
+                                <p class="mb-0">Hiệu lực</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="border rounded p-3 mb-3 bg-warning text-dark">
+                                <h3>@Model.SoDangKyDaHuy</h3>
+                                <p class="mb-0">Đã hủy</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress mt-3">
+                        @{ 
+                            var tiLeDangKy = (float)Model.SoDangKyHieuLuc / Model.KhoaHoc.SoLuongHocVienToiDa * 100;
+                            var tiLeDaHuy = (float)Model.SoDangKyDaHuy / Model.KhoaHoc.SoLuongHocVienToiDa * 100;
+                        }
+                        <div class="progress-bar bg-success" role="progressbar" style="width: @tiLeDangKy%" 
+                            aria-valuenow="@tiLeDangKy" aria-valuemin="0" aria-valuemax="100">
+                            @tiLeDangKy.ToString("0.0")%
+                        </div>
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: @tiLeDaHuy%" 
+                            aria-valuenow="@tiLeDaHuy" aria-valuemin="0" aria-valuemax="100">
+                            @tiLeDaHuy.ToString("0.0")%
+                        </div>
+                    </div>
+                    <div class="text-center mt-2">
+                        <small>Tỉ lệ lấp đầy: @tiLeDangKy.ToString("0.0")% (@Model.SoDangKyHieuLuc/@Model.KhoaHoc.SoLuongHocVienToiDa chỗ)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Danh sách đăng ký</h5>
+            <a asp-action="ThongKe" class="btn btn-outline-light btn-sm">Quay lại thống kê</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover" id="tableDangKy">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>STT</th>
+                            <th>Học viên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Ngày đăng ký</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày hủy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var stt = 1;
+                            foreach (var item in Model.DanhSachDangKy)
+                            {
+                                <tr class="@(item.DaHuy ? "table-warning" : "")">
+                                    <td>@(stt++)</td>
+                                    <td>@item.TenHocVien</td>
+                                    <td>@item.EmailHocVien</td>
+                                    <td>@item.SoDienThoai</td>
+                                    <td>@item.NgayDangKy.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @if (item.DaHuy)
+                                        {
+                                            <span class="badge bg-warning text-dark">Đã hủy</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Hiệu lực</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @(item.NgayHuy.HasValue ? item.NgayHuy.Value.ToString("dd/MM/yyyy HH:mm") : "-")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tableDangKy').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Vietnamese.json"
+                },
+                "order": [[4, "desc"]] // Sắp xếp theo ngày đăng ký (cột thứ 5) giảm dần
+            });
+        });
+    </script>
+}

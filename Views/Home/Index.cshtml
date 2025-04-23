@@ -3,52 +3,134 @@
     ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Chào mừng đến với Trung tâm Đào tạo</h1>
-    <p>Chúng tôi cung cấp các khóa học chất lượng cao với đội ngũ giảng viên chuyên nghiệp.</p>
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+<!-- Hero Section -->
+<div class="forest-bg rounded-3 mb-5 py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-4">Chào mừng đến với Trung tâm Đào tạo</h1>
+                <p class="fs-5 mb-4">Nâng cao kỹ năng của bạn với các khóa học chất lượng cao từ đội ngũ giảng viên chuyên nghiệp và giàu kinh nghiệm.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <a asp-controller="DangKyKhoaHoc" asp-action="Index" class="btn btn-secondary btn-lg px-4">Khám phá khóa học</a>
+                    <a href="#upcoming-courses" class="btn btn-outline-light btn-lg px-4">Khóa học sắp mở</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-8 offset-md-2">
-        <h2 class="text-center mb-4">Khóa học sắp khai giảng</h2>
+<!-- Khóa học sắp khai giảng -->
+<div id="upcoming-courses" class="wheat-bg py-5 mb-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4">Khóa học sắp khai giảng</h2>
         
         @if (Model.Any())
         {
-            <div class="row">
+            <div class="row g-4">
                 @foreach (var khoaHoc in Model)
                 {
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">@khoaHoc.TenKhoaHoc</h5>
-                                <p class="card-text">
-                                    <strong>Giảng viên:</strong> @khoaHoc.GiangVien<br />
-                                    <strong>Khai giảng:</strong> @khoaHoc.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")<br />
-                                    <strong>Học phí:</strong> @String.Format("{0:N0}", khoaHoc.HocPhi) VNĐ<br />
-                                    <strong>Số lượng học viên tối đa:</strong> @khoaHoc.SoLuongHocVienToiDa
-                                </p>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm hover-card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="card-title fw-bold mb-0">@khoaHoc.TenKhoaHoc</h5>
                             </div>
-                            <div class="card-footer">
-                                <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@khoaHoc.MaKhoaHoc" class="btn btn-primary">Chi tiết</a>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <a asp-controller="KhoaHoc" asp-action="DangKy" asp-route-id="@khoaHoc.MaKhoaHoc" class="btn btn-success">Đăng ký</a>
-                                }
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-white bi bi-person-fill" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 text-muted small">Giảng viên</p>
+                                        <p class="mb-0 fw-medium">@khoaHoc.GiangVien</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-dark bi bi-calendar-event-fill" viewBox="0 0 16 16">
+                                            <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 text-muted small">Khai giảng</p>
+                                        <p class="mb-0 fw-medium">@khoaHoc.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-white bi bi-cash-stack" viewBox="0 0 16 16">
+                                            <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                                            <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 text-muted small">Học phí</p>
+                                        <p class="mb-0 fw-medium">@String.Format("{0:N0}", khoaHoc.HocPhi) VNĐ</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-dark bi bi-people-fill" viewBox="0 0 16 16">
+                                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 text-muted small">Số lượng học viên tối đa</p>
+                                        <p class="mb-0 fw-medium">@khoaHoc.SoLuongHocVienToiDa</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-0 p-4 pt-0">
+                                <div class="d-flex gap-2 mt-3">
+                                    <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@khoaHoc.MaKhoaHoc" class="btn btn-primary flex-grow-1">Chi tiết</a>
+                                    @if (!User.Identity.IsAuthenticated || !User.IsInRole("QuanTriVien"))
+                                    {
+                                        <a asp-controller="DangKyKhoaHoc" asp-action="DangKy" asp-route-id="@khoaHoc.MaKhoaHoc" class="btn btn-success flex-grow-1">Đăng ký</a>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 }
             </div>
+            
+            <div class="text-center mt-5">
+                <a asp-controller="DangKyKhoaHoc" asp-action="Index" class="btn btn-primary btn-lg px-4">Xem tất cả khóa học</a>
+            </div>
         }
         else
         {
-            <div class="alert alert-info">
-                Hiện không có khóa học nào sắp khai giảng.
+            <div class="alert alert-info text-center p-4 mx-auto" style="max-width: 600px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle mb-3" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                </svg>
+                <h4 class="mb-3">Hiện không có khóa học nào sắp khai giảng</h4>
+                <p class="mb-0">Vui lòng quay lại sau hoặc liên hệ với chúng tôi để biết thêm thông tin về lịch khai giảng sắp tới.</p>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a asp-controller="DangKyKhoaHoc" asp-action="Index" class="btn btn-primary btn-lg px-4">Xem tất cả khóa học</a>
             </div>
         }
-        
-        <div class="text-center mt-4">
-            <a asp-controller="KhoaHoc" asp-action="Index" class="btn btn-outline-primary">Xem tất cả khóa học</a>
-        </div>
     </div>
 </div>
+
+
+<!-- CSS bổ sung -->
+<style>
+    .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+</style>

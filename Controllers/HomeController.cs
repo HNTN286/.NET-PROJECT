@@ -15,18 +15,35 @@ namespace TrungTamDaoTao.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult AdminIndex()
         {
-            // Lấy danh sách 5 khóa học sắp khai giảng
-            var khoaHocSapKhaiGiang = await _context.KhoaHoc
-                .Where(k => k.ThoiGianKhaiGiang >= DateTime.Now)
-                .OrderBy(k => k.ThoiGianKhaiGiang)
-                .Take(5)
-                .ToListAsync();
-
-            return View(khoaHocSapKhaiGiang);
+            // Nếu người dùng là QuanTriVien, chuyển hướng họ đến trang Dashboard
+            if (User.IsInRole("QuanTriVien"))
+            {
+                return RedirectToAction("Dashboard", "Admin");
+            }
+            
+            // Người dùng khác vẫn xem được trang Home
+            return View();
         }
 
+        public async Task<IActionResult> Index()
+{
+    // Kiểm tra vai trò và chuyển hướng nếu là admin
+    if (User.IsInRole("QuanTriVien"))
+    {
+        return RedirectToAction("Dashboard", "Admin");
+    }
+    
+    // Tiếp tục với logic thông thường cho người dùng không phải admin
+    var khoaHocSapKhaiGiang = await _context.KhoaHoc
+        .Where(k => k.ThoiGianKhaiGiang >= DateTime.Now)
+        .OrderBy(k => k.ThoiGianKhaiGiang)
+        .Take(5)
+        .ToListAsync();
+    
+    return View(khoaHocSapKhaiGiang);
+}
         public IActionResult Privacy()
         {
             return View();

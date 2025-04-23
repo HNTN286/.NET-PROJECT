@@ -4,6 +4,8 @@
     ViewData["Title"] = "Thống kê doanh thu theo khóa học";
 }
 
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
 <div class="container py-4">
     <h1 class="mb-4">Thống kê doanh thu theo khóa học</h1>
 
@@ -104,38 +106,48 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Khởi tạo biểu đồ
         document.addEventListener('DOMContentLoaded', function () {
-            var ctx = document.getElementById('doanhThuChart').getContext('2d');
-            var labels = [@Html.Raw(string.Join(",", Model.DoanhThuKhoaHoc.Select(x => $"'{x.TenKhoaHoc}'")))];
-            var doanhThuData = [@string.Join(",", Model.DoanhThuKhoaHoc.Select(x => x.TongDoanhThu))];
-            
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Doanh thu (VNĐ)',
-                        data: doanhThuData,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Doanh thu theo từng khóa học'
-                        }
-                    }
+    // Lấy context của canvas
+    var ctx = document.getElementById('doanhThuChart').getContext('2d');
+    
+    // Lấy dữ liệu từ bảng hiện có
+    var table = document.querySelector('table'); // Điều chỉnh selector nếu cần
+    var rows = Array.from(document.querySelectorAll('tbody tr')); // Lấy tất cả các hàng dữ liệu
+    
+    var labels = [];
+    var data = [];
+    
+    // Duyệt qua từng hàng để lấy tên khóa học và doanh thu
+    rows.forEach(function(row) {
+        var tenKhoaHoc = row.querySelector('td:nth-child(2)').textContent.trim();
+        var doanhThu = parseFloat(row.querySelector('td:nth-child(4)').textContent.replace(/[^\d]/g, ''));
+        
+        labels.push(tenKhoaHoc);
+        data.push(doanhThu);
+    });
+    
+    // Khởi tạo biểu đồ với dữ liệu từ bảng
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Doanh thu (VNĐ)',
+                data: data,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            });
-        });
+            }
+        }
+    });
+});
     </script>
 }

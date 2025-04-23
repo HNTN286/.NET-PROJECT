@@ -24,7 +24,8 @@ namespace TrungTamDaoTao.Controllers
         // GET: HocVien
         public async Task<IActionResult> Index()
         {
-            return View(await _context.HocVien.ToListAsync());
+            // Chỉ lấy những người có vai trò là HocVien
+            return View(await _context.HocVien.Where(h => h.VaiTro == "HocVien").ToListAsync());
         }
 
         // GET: HocVien/Details/5
@@ -118,7 +119,7 @@ namespace TrungTamDaoTao.Controllers
         // POST: HocVien/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("MaHocVien,HoTen,NgaySinh,SoDienThoai,Email,TaiKhoan,PasswordHash,VaiTro")] HocVien hocVien, string currentPassword)
+        public async Task<IActionResult> Edit(string id, [Bind("MaHocVien,HoTen,NgaySinh,SoDienThoai,Email,TaiKhoan,PasswordHash")] HocVien hocVien, string currentPassword)
         {
             if (id != hocVien.MaHocVien)
             {
@@ -163,7 +164,8 @@ namespace TrungTamDaoTao.Controllers
                     currentHocVien.SoDienThoai = hocVien.SoDienThoai;
                     currentHocVien.Email = hocVien.Email;
                     currentHocVien.TaiKhoan = hocVien.TaiKhoan;
-                    currentHocVien.VaiTro = hocVien.VaiTro;
+                    // Giữ nguyên vai trò, không cho phép thay đổi
+                    // currentHocVien.VaiTro = hocVien.VaiTro; -- dòng này đã được loại bỏ
 
                     // Chỉ cập nhật mật khẩu nếu có nhập mật khẩu mới
                     if (!string.IsNullOrEmpty(hocVien.PasswordHash) && hocVien.PasswordHash != "••••••••")

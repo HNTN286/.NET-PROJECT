@@ -150,7 +150,6 @@ E:\Quanlytrungtamdaotao\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.
 E:\Quanlytrungtamdaotao\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 E:\Quanlytrungtamdaotao\obj\Debug\net9.0\scopedcss\bundle\Quanlytrungtamdaotao.styles.css
 E:\Quanlytrungtamdaotao\obj\Debug\net9.0\scopedcss\projectbundle\Quanlytrungtamdaotao.bundle.scp.css
-E:\Quanlytrungtamdaotao\obj\Debug\net9.0\compressed\6ytmzxtqlw-b9sayid5wm.gz
 E:\Quanlytrungtamdaotao\obj\Debug\net9.0\compressed\608gsuzt8h-61n19gt1b8.gz
 E:\Quanlytrungtamdaotao\obj\Debug\net9.0\compressed\sb6ql98laj-xtxxf3hu2r.gz
 E:\Quanlytrungtamdaotao\obj\Debug\net9.0\compressed\h6mzj5yvwa-bqjiyaj88i.gz
@@ -236,3 +235,6 @@ E:\Quanlytrungtamdaotao\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
 E:\Quanlytrungtamdaotao\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
 E:\Quanlytrungtamdaotao\bin\Debug\net9.0\BCrypt.Net-Next.dll
 E:\Quanlytrungtamdaotao\obj\Debug\net9.0\Quanlytrungtamdaotao.sourcelink.json
+E:\Quanlytrungtamdaotao\obj\Debug\net9.0\compressed\z1wgtwabm6-inm1l3xynm.gz
+E:\Quanlytrungtamdaotao\obj\Debug\net9.0\compressed\nexh0tnauu-uc461iri59.gz
+E:\Quanlytrungtamdaotao\obj\Debug\net9.0\compressed\6ytmzxtqlw-hhb2h9ii57.gz

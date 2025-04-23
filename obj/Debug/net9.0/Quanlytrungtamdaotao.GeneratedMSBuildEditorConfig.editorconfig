@@ -48,8 +48,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRG9hbmhUaHVUaGVvVGhvaUdpYW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Quanlytrungtamdaotao/Views/DangKyKhoaHoc/ChiTietDangKy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ0t5S2hvYUhvY1xDaGlUaWV0RGFuZ0t5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Quanlytrungtamdaotao/Views/DangKyKhoaHoc/DangKy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ0t5S2hvYUhvY1xEYW5nS3kuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Quanlytrungtamdaotao/Views/DangKyKhoaHoc/DanhSachDangKy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ0t5S2hvYUhvY1xEYW5oU2FjaERhbmdLeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Quanlytrungtamdaotao/Views/DangKyKhoaHoc/Huy.cshtml]

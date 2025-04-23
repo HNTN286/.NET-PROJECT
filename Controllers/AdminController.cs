@@ -162,25 +162,5 @@ namespace TrungTamDaoTao.Controllers
 
             return View(doanhThuViewModel);
         }
-
-        // // Quản lý khóa học dành cho Admin
-        // public async Task<IActionResult> QuanLyKhoaHoc()
-        // {
-        //     var khoaHocList = await _context.KhoaHoc
-        //         .OrderByDescending(k => k.ThoiGianKhaiGiang)
-        //         .ToListAsync();
-        //     return View(khoaHocList);
-        // }
-
-        // // Quản lý đăng ký khóa học dành cho Admin
-        // public async Task<IActionResult> QuanLyDangKyKhoaHoc()
-        // {
-        //     var dangKyList = await _context.DangKyKhoaHoc
-        //         .Include(dk => dk.HocVien)
-        //         .Include(dk => dk.KhoaHoc)
-        //         .OrderByDescending(dk => dk.NgayDangKy)
-        //         .ToListAsync();
-        //     return View(dangKyList);
-        // }
     }
 }

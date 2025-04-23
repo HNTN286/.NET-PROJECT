@@ -12,7 +12,14 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Trung Tâm Đào Tạo</a>
+                @if (!User.IsInRole("QuanTriVien"))
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Trung Tâm Đào Tạo</a>
+                }
+                else
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="Dashboard">Quản Trị Hệ Thống</a>
+                }
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -37,7 +44,12 @@
                             </ul>
                         </li>
                         }
-
+                        <!-- @if (User.IsInRole("HocVien"))
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="HocVien" asp-action="Profile">Trang cá nhân</a>
+                        </li>
+                        } -->
                         <!-- @if (User.IsInRole("HocVien"))
                         {
                         <li class="nav-item dropdown">

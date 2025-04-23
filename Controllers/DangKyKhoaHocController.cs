@@ -248,5 +248,128 @@ namespace TrungTamDaoTao.Controllers
 
             return View(thongKeList);
         }
+
+        // GET: DangKyKhoaHoc/ChiTietDangKy/ABC123 - Hiển thị danh sách học viên đã đăng ký và hủy cho một khóa học cụ thể
+        [Authorize(Roles = "QuanTriVien")]
+        public async Task<IActionResult> ChiTietDangKy(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var khoaHoc = await _context.KhoaHoc
+                .FirstOrDefaultAsync(kh => kh.MaKhoaHoc == id);
+
+            if (khoaHoc == null)
+            {
+                return NotFound();
+            }
+
+            // Lấy danh sách đăng ký kèm thông tin học viên
+            var danhSachDangKy = await _context.DangKyKhoaHoc
+                .Include(dk => dk.HocVien)
+                .Where(dk => dk.MaKhoaHoc == id)
+                .OrderByDescending(dk => dk.NgayDangKy)
+                .Select(dk => new ChiTietDangKyViewModel
+                {
+                    Id = dk.Id,
+                    MaHocVien = dk.MaHocVien,
+                    TenHocVien = dk.HocVien.HoTen,
+                    EmailHocVien = dk.HocVien.Email,
+                    SoDienThoai = dk.HocVien.SoDienThoai,
+                    NgayDangKy = dk.NgayDangKy,
+                    NgayHuy = dk.NgayHuy,
+                    DaHuy = dk.DaHuy,
+                    ThoiGianKhaiGiang = khoaHoc.ThoiGianKhaiGiang
+                })
+                .ToListAsync();
+
+            var viewModel = new ChiTietKhoaHocDangKyViewModel
+            {
+                KhoaHoc = khoaHoc,
+                DanhSachDangKy = danhSachDangKy,
+                TongSoDangKy = danhSachDangKy.Count,
+                SoDangKyHieuLuc = danhSachDangKy.Count(dk => !dk.DaHuy),
+                SoDangKyDaHuy = danhSachDangKy.Count(dk => dk.DaHuy)
+            };
+
+            return View(viewModel);
+        }
+
+        // GET: DangKyKhoaHoc/DanhSachDangKy - Hiển thị tất cả đăng ký từ tất cả khóa học (cho quản trị viên)
+        [Authorize(Roles = "QuanTriVien")]
+        public async Task<IActionResult> DanhSachDangKy(string searchString, string trangThai, DateTime? tuNgay, DateTime? denNgay)
+        {
+            var danhSachDangKyQuery = _context.DangKyKhoaHoc
+                .Include(dk => dk.KhoaHoc)
+                .Include(dk => dk.HocVien)
+                .AsQueryable();
+
+            // Lọc theo từ khóa tìm kiếm
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                danhSachDangKyQuery = danhSachDangKyQuery.Where(dk =>
+                    dk.HocVien.HoTen.ToLower().Contains(searchString) ||
+                    dk.HocVien.Email.ToLower().Contains(searchString) ||
+                    dk.KhoaHoc.TenKhoaHoc.ToLower().Contains(searchString) ||
+                    dk.KhoaHoc.MaKhoaHoc.ToLower().Contains(searchString)
+                );
+            }
+
+            // Lọc theo trạng thái
+            if (!string.IsNullOrEmpty(trangThai))
+            {
+                switch (trangThai)
+                {
+                    case "DangKy":
+                        danhSachDangKyQuery = danhSachDangKyQuery.Where(dk => !dk.DaHuy);
+                        break;
+                    case "DaHuy":
+                        danhSachDangKyQuery = danhSachDangKyQuery.Where(dk => dk.DaHuy);
+                        break;
+                }
+            }
+
+            // Lọc theo khoảng thời gian đăng ký
+            if (tuNgay.HasValue)
+            {
+                danhSachDangKyQuery = danhSachDangKyQuery.Where(dk => dk.NgayDangKy >= tuNgay.Value);
+            }
+
+            if (denNgay.HasValue)
+            {
+                // Đặt thời gian đến cuối ngày
+                DateTime denNgayCuoiNgay = denNgay.Value.AddDays(1).AddTicks(-1);
+                danhSachDangKyQuery = danhSachDangKyQuery.Where(dk => dk.NgayDangKy <= denNgayCuoiNgay);
+            }
+
+            // Lấy dữ liệu và ánh xạ sang ViewModel
+            var danhSachDangKy = await danhSachDangKyQuery
+                .OrderByDescending(dk => dk.NgayDangKy)
+                .Select(dk => new DanhSachDangKyViewModel
+                {
+                    Id = dk.Id,
+                    MaKhoaHoc = dk.MaKhoaHoc,
+                    TenKhoaHoc = dk.KhoaHoc.TenKhoaHoc,
+                    MaHocVien = dk.MaHocVien,
+                    TenHocVien = dk.HocVien.HoTen,
+                    EmailHocVien = dk.HocVien.Email,
+                    NgayDangKy = dk.NgayDangKy,
+                    NgayHuy = dk.NgayHuy,
+                    DaHuy = dk.DaHuy,
+                    ThoiGianKhaiGiang = dk.KhoaHoc.ThoiGianKhaiGiang
+                })
+                .ToListAsync();
+
+            // Truyền các tham số tìm kiếm qua ViewBag để giữ lại giá trị trên form
+            ViewBag.CurrentSearchString = searchString;
+            ViewBag.CurrentTrangThai = trangThai;
+            ViewBag.CurrentTuNgay = tuNgay;
+            ViewBag.CurrentDenNgay = denNgay;
+
+            return View(danhSachDangKy);
+        }
     }
 }

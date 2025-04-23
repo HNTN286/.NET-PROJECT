@@ -4,64 +4,199 @@
     ViewData["Title"] = "Danh sách khóa học";
 }
 
-<div class="container mt-4">
-    <h2>Danh sách khóa học</h2>
+<link rel="stylesheet" href="~/css/khoahoc.css" />
+
+<div class="course-container">
+    <div class="page-banner">
+        <div class="banner-content">
+            <h1>Danh sách khóa học</h1>
+            <p>Khám phá các khóa học chất lượng cao tại trung tâm đào tạo của chúng tôi</p>
+        </div>
+    </div>
+
+    <div class="course-controls">
+        <div class="course-search">
+            <input type="text" id="searchCourse" placeholder="Tìm kiếm khóa học..." class="search-input">
+            <button class="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        
+        @if (User.IsInRole("QuanTriVien"))
+        {
+            <a href="@Url.Action("Create")" class="btn-create">
+                <i class="fas fa-plus-circle"></i> Thêm khóa học mới
+            </a>
+        }
+    </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success">
-            @TempData["SuccessMessage"]
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button class="close-alert"><i class="fas fa-times"></i></button>
         </div>
     }
 
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button class="close-alert"><i class="fas fa-times"></i></button>
         </div>
     }
 
-    @if (User.IsInRole("QuanTriVien"))
-    {
-        <p>
-            <a asp-action="Create" class="btn btn-primary">Thêm khóa học mới</a>
-        </p>
-    }
+    <div class="course-stats">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-book"></i></div>
+            <div class="stat-content">
+                <h3>Tổng số khóa học</h3>
+                <p>@Model.Count()</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="stat-content">
+                <h3>Sắp khai giảng</h3>
+                <p>@Model.Count(k => k.ThoiGianKhaiGiang > DateTime.Now)</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+            <div class="stat-content">
+                <h3>Giảng viên</h3>
+                <p>@Model.Select(k => k.GiangVien).Distinct().Count()</p>
+            </div>
+        </div>
+    </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead class="table-primary">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.MaKhoaHoc)</th>
-                    <th>@Html.DisplayNameFor(model => model.TenKhoaHoc)</th>
-                    <th>@Html.DisplayNameFor(model => model.GiangVien)</th>
-                    <th>@Html.DisplayNameFor(model => model.ThoiGianKhaiGiang)</th>
-                    <th>@Html.DisplayNameFor(model => model.HocPhi)</th>
-                    <th>@Html.DisplayNameFor(model => model.SoLuongHocVienToiDa)</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
+    <div class="course-grid">
+        @foreach (var item in Model)
+        {
+            var isUpcoming = item.ThoiGianKhaiGiang > DateTime.Now;
+            var cardClass = isUpcoming ? "upcoming" : "";
+            
+            <div class="course-card @cardClass" data-name="@item.TenKhoaHoc.ToLower()">
+                <div class="course-card-header">
+                    <h3>@item.TenKhoaHoc</h3>
+                    <span class="course-id">Mã: @item.MaKhoaHoc</span>
+                </div>
+                <div class="course-card-body">
+                    <div class="course-info">
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-user-tie"></i></div>
+                            <div class="info-text">
+                                <span class="info-label">Giảng viên</span>
+                                <span class="info-value">@item.GiangVien</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div class="info-text">
+                                <span class="info-label">Khai giảng</span>
+                                <span class="info-value">@item.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-coins"></i></div>
+                            <div class="info-text">
+                                <span class="info-label">Học phí</span>
+                                <span class="info-value">@item.HocPhi.ToString("N0") VNĐ</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-users"></i></div>
+                            <div class="info-text">
+                                <span class="info-label">Số lượng tối đa</span>
+                                <span class="info-value">@item.SoLuongHocVienToiDa học viên</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-card-footer">
+                    <a href="@Url.Action("Details", new { id = item.MaKhoaHoc })" class="btn-details">
+                        <i class="fas fa-info-circle"></i> Chi tiết
+                    </a>
+                    @if (User.IsInRole("QuanTriVien"))
+                    {
+                        <div class="admin-actions">
+                            <a href="@Url.Action("Edit", new { id = item.MaKhoaHoc })" class="btn-edit">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a href="@Url.Action("Delete", new { id = item.MaKhoaHoc })" class="btn-delete">
+                                <i class="fas fa-trash-alt"></i> Xóa
+                            </a>
+                        </div>
+                    }
+                </div>
+                @if (isUpcoming)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.MaKhoaHoc)</td>
-                        <td>@Html.DisplayFor(modelItem => item.TenKhoaHoc)</td>
-                        <td>@Html.DisplayFor(modelItem => item.GiangVien)</td>
-                        <td>@item.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</td>
-                        <td>@item.HocPhi.ToString("N0") VNĐ</td>
-                        <td>@Html.DisplayFor(modelItem => item.SoLuongHocVienToiDa)</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.MaKhoaHoc" class="btn btn-info btn-sm">Chi tiết</a>
-                            @if (User.IsInRole("QuanTriVien"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@item.MaKhoaHoc" class="btn btn-warning btn-sm">Sửa</a>
-                                <a asp-action="Delete" asp-route-id="@item.MaKhoaHoc" class="btn btn-danger btn-sm">Xóa</a>
-                            }
-                        </td>
-                    </tr>
+                    <div class="course-badge">
+                        <span>Sắp khai giảng</span>
+                    </div>
                 }
-            </tbody>
-        </table>
+            </div>
+        }
+    </div>
+    
+    <div id="noCourseFound" class="no-course-found" style="display: none;">
+        <i class="fas fa-search"></i>
+        <p>Không tìm thấy khóa học phù hợp với tiêu chí tìm kiếm</p>
+        <button id="resetSearch" class="btn-reset">Xem tất cả khóa học</button>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="~/js/khoahoc.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Tìm kiếm khóa học
+            $('#searchCourse').on('input', function() {
+                var searchText = $(this).val().toLowerCase();
+                var visibleCount = 0;
+                
+                $('.course-card').each(function() {
+                    var courseName = $(this).data('name');
+                    
+                    if (courseName.includes(searchText)) {
+                        $(this).show();
+                        visibleCount++;
+                    } else {
+                        $(this).hide();
+                    }
+                });
+                
+                if (visibleCount === 0) {
+                    $('#noCourseFound').show();
+                } else {
+                    $('#noCourseFound').hide();
+                }
+            });
+            
+            // Reset tìm kiếm
+            $('#resetSearch').on('click', function() {
+                $('#searchCourse').val('');
+                $('.course-card').show();
+                $('#noCourseFound').hide();
+            });
+            
+            // Đóng thông báo
+            $('.close-alert').on('click', function() {
+                $(this).closest('.alert').fadeOut();
+            });
+            
+            // Animation khi scroll
+            $(window).scroll(function() {
+                $('.course-card').each(function() {
+                    var position = $(this).offset().top;
+                    var scroll = $(window).scrollTop();
+                    var windowHeight = $(window).height();
+                    
+                    if (scroll > position - windowHeight + 100) {
+                        $(this).addClass('visible');
+                    }
+                });
+            }).scroll();
+        });
+    </script>
+}

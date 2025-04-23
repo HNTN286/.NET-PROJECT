@@ -4,6 +4,8 @@
     ViewData["Title"] = "Thống kê đăng ký khóa học";
 }
 
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
 <h1>Thống kê đăng ký khóa học</h1>
 
 <div class="row mb-4">
@@ -22,55 +24,81 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header">
-                <h4>Bảng thống kê chi tiết</h4>
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Bảng thống kê chi tiết</h4>
+                <div>
+                    <a asp-action="DanhSachDangKy" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-list-ul"></i> Xem toàn bộ đăng ký
+                    </a>
+                </div>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Mã khóa học</th>
-                            <th>Tên khóa học</th>
-                            <th>Thời gian khai giảng</th>
-                            <th>Số lượng tối đa</th>
-                            <th>Số lượng đã đăng ký</th>
-                            <th>Số lượng đã hủy</th>
-                            <th>Tỉ lệ đăng ký</th>
-                            <th>Doanh thu</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="tableThongKe">
+                        <thead class="table-primary">
                             <tr>
-                                <td>@item.MaKhoaHoc</td>
-                                <td>@item.TenKhoaHoc</td>
-                                <td>@item.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</td>
-                                <td>@item.SoLuongHocVienToiDa</td>
-                                <td>@item.SoLuongHocVienDaDangKy</td>
-                                <td>@item.SoLuongHocVienDaHuy</td>
-                                <td>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: @(item.TiLeDangKy)%;" 
-                                             aria-valuenow="@item.TiLeDangKy" aria-valuemin="0" aria-valuemax="100">
-                                            @item.TiLeDangKy.ToString("0.0")%
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>@item.DoanhThu.ToString("N0") VNĐ</td>
+                                <th>STT</th>
+                                <th>Mã khóa học</th>
+                                <th>Tên khóa học</th>
+                                <th>Khai giảng</th>
+                                <th>SL tối đa</th>
+                                <th>SL đăng ký</th>
+                                <th>SL hủy</th>
+                                <th>Tỉ lệ đăng ký</th>
+                                <th>Doanh thu</th>
+                                <th>Chi tiết</th>
                             </tr>
-                        }
-                    </tbody>
-                    <tfoot>
-                        <tr class="table-info">
-                            <td colspan="4" class="text-end"><strong>Tổng:</strong></td>
-                            <td><strong>@Model.Sum(x => x.SoLuongHocVienDaDangKy)</strong></td>
-                            <td><strong>@Model.Sum(x => x.SoLuongHocVienDaHuy)</strong></td>
-                            <td></td>
-                            <td><strong>@Model.Sum(x => x.DoanhThu).ToString("N0") VNĐ</strong></td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </thead>
+                        <tbody>
+                            @{
+                                var stt = 1;
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@(stt++)</td>
+                                        <td>@item.MaKhoaHoc</td>
+                                        <td>@item.TenKhoaHoc</td>
+                                        <td>@item.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.SoLuongHocVienToiDa</td>
+                                        <td>@item.SoLuongHocVienDaDangKy</td>
+                                        <td>@item.SoLuongHocVienDaHuy</td>
+                                        <td>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" role="progressbar" 
+                                                    style="width: @item.TiLeDangKy%"
+                                                    aria-valuenow="@item.TiLeDangKy" aria-valuemin="0" aria-valuemax="100">
+                                                    @item.TiLeDangKy.ToString("0.0")%
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@item.DoanhThu.ToString("N0") VND</td>
+                                        <td>
+                                            <a asp-action="ChiTietDangKy" asp-route-id="@item.MaKhoaHoc" class="btn btn-sm btn-outline-primary" title="Xem chi tiết đăng ký">
+                                                <i class="bi bi-people"></i> Xem
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                        <tfoot class="table-primary">
+                            <tr class="fw-bold">
+                                <td colspan="4">Tổng cộng</td>
+                                <td>@Model.Sum(kh => kh.SoLuongHocVienToiDa)</td>
+                                <td>@Model.Sum(kh => kh.SoLuongHocVienDaDangKy)</td>
+                                <td>@Model.Sum(kh => kh.SoLuongHocVienDaHuy)</td>
+                                <td>
+                                    @{
+                                        var tongTiLe = (float)Model.Sum(kh => kh.SoLuongHocVienDaDangKy) / Model.Sum(kh => kh.SoLuongHocVienToiDa) * 100;
+                                    }
+                                    @tongTiLe.ToString("0.0")%
+                                </td>
+                                <td>@Model.Sum(kh => kh.DoanhThu).ToString("N0") VND</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -110,6 +138,13 @@
                             beginAtZero: true
                         }
                     }
+                }
+            });
+            
+            // Thêm DataTable cho bảng thống kê
+            $('#tableThongKe').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/vi.json'
                 }
             });
         });

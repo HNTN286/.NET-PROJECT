@@ -5,12 +5,20 @@
       "PackagePath": "staticwebassets\\Quanlytrungtamdaotao.vczlhuqc3i.bundle.scp.css"
     },
     {
+      "Id": "E:\\Quanlytrungtamdaotao\\wwwroot\\css\\khoahoc.css",
+      "PackagePath": "staticwebassets\\css\\khoahoc.css"
+    },
+    {
       "Id": "E:\\Quanlytrungtamdaotao\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
       "Id": "E:\\Quanlytrungtamdaotao\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "E:\\Quanlytrungtamdaotao\\wwwroot\\js\\khoahoc.js",
+      "PackagePath": "staticwebassets\\js\\khoahoc.js"
     },
     {
       "Id": "E:\\Quanlytrungtamdaotao\\wwwroot\\js\\site.js",
