@@ -4,6 +4,16 @@
     ViewData["Title"] = "Thống kê đăng ký khóa học";
 }
 
+<style>
+.card-header-custom {
+  background-color: #327039;
+  color: #ffffff; // Đảm bảo text trắng nếu cần
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
+
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 <h1>Thống kê đăng ký khóa học</h1>
@@ -24,14 +34,15 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Bảng thống kê chi tiết</h4>
-                <div>
-                    <a asp-action="DanhSachDangKy" class="btn btn-outline-light btn-sm">
-                        <i class="bi bi-list-ul"></i> Xem toàn bộ đăng ký
-                    </a>
-                </div>
-            </div>
+            <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+    <h4 class="mb-0">Bảng thống kê chi tiết</h4>
+    <div>
+        <a asp-action="DanhSachDangKy" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-list-ul"></i> Xem toàn bộ đăng ký
+        </a>
+    </div>
+</div>
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped table-hover" id="tableThongKe">

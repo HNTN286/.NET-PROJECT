@@ -4,13 +4,23 @@
     ViewData["Title"] = "Chi tiết khóa học";
 }
 
+<style>
+.card-header-custom {
+  background-color: #ffc107;
+  color: #ffffff; // Đảm bảo text trắng nếu cần
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
+
 <link rel="stylesheet" href="~/css/khoahoc.css" />
 
 <div class="container mt-4">
     <h2>Chi tiết khóa học</h2>
 
     <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header card-header-custom">
             <h4>@Model.TenKhoaHoc</h4>
         </div>
         <div class="card-body">
@@ -62,7 +72,7 @@
         </div>
         <div class="card-footer">
             <div class="d-flex justify-content-between">
-                <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+                <a asp-controller="DangKyKhoaHoc" asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
                 <div>
                     @if (User.IsInRole("QuanTriVien"))
                     {

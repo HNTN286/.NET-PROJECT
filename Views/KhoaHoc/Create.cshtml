@@ -6,11 +6,21 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
+<style>
+.card-header-custom {
+  background-color: #327039;
+  color: #ffffff; // Đảm bảo text trắng nếu cần
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
+
 <div class="container mt-4">
     <h2>Thêm khóa học mới</h2>
 
     <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header card-header-custom">
             <h5>Thông tin khóa học</h5>
         </div>
         <div class="card-body">

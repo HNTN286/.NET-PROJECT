@@ -6,12 +6,22 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
+<style>
+.card-header-custom {
+  background-color: #327039;
+  color: #ffffff; // Đảm bảo text trắng nếu cần
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
+
 <div class="container mt-4">
     <h2>Danh sách đăng ký khóa học</h2>
     <hr />
 
     <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header card-header-custom">
             <h5 class="mb-0">Tìm kiếm và lọc</h5>
         </div>
         <div class="card-body">
@@ -74,7 +84,7 @@
     </div>
 
     <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header card-header-custom">
             <h5 class="mb-0">Danh sách đăng ký (@Model.Count đăng ký)</h5>
         </div>
         <div class="card-body">

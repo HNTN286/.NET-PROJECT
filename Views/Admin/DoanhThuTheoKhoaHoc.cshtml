@@ -4,6 +4,13 @@
     ViewData["Title"] = "Thống kê doanh thu theo khóa học";
 }
 
+<style>
+.card-header-custom {
+  background-color: #327039;
+  color: #ffffff; // Text trắng để dễ đọc
+}
+</style>
+
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 <div class="container py-4">
@@ -37,7 +44,7 @@
 
     <!-- Biểu đồ -->
     <div class="card mb-4">
-        <div class="card-header bg-light">
+        <div class="card-header card-header-custom">
             <h5 class="mb-0">Biểu đồ doanh thu theo khóa học</h5>
         </div>
         <div class="card-body">
@@ -47,7 +54,7 @@
 
     <!-- Bảng dữ liệu -->
     <div class="card">
-        <div class="card-header bg-light">
+        <div class="card-header card-header-custom">
             <h5 class="mb-0">Chi tiết doanh thu theo khóa học</h5>
         </div>
         <div class="card-body">

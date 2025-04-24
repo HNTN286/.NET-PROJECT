@@ -34,15 +34,15 @@
                         }
                         @if (!User.Identity.IsAuthenticated || !User.IsInRole("QuanTriVien"))
                         {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="dangKyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Khoá Học
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dangKyDropdown">
-                                <li><a class="dropdown-item" asp-controller="DangKyKhoaHoc" asp-action="Index">Danh sách khóa học</a></li>
-                                <li><a class="dropdown-item" asp-controller="DangKyKhoaHoc" asp-action="KhoaHocCuaToi">Khóa học của tôi</a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DangKyKhoaHoc" asp-action="Index">Khoá Học</a>
                         </li>
+                        }
+                        @if (User.IsInRole("HocVien"))
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DangKyKhoaHoc" asp-action="KhoaHocCuaToi">Khoá học của tôi</a>
+                        </li> 
                         }
                         <!-- @if (User.IsInRole("HocVien"))
                         {
@@ -80,12 +80,14 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="KhoaHoc" asp-action="Index"> Quản lý Khóa học</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="DangKyKhoaHoc" asp-action="ThongKe"> Thống kê đăng ký</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="thongKeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Thống Kê
+                                    Doanh Thu
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="thongKeDropdown">
-                                    <li><a class="dropdown-item" asp-controller="DangKyKhoaHoc" asp-action="ThongKe">Thống kê đăng ký</a></li>
                                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="DoanhThuTheoKhoaHoc">Doanh thu theo khóa học</a></li>
                                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="DoanhThuTheoThoiGian">Doanh thu theo thời gian</a></li>
                                 </ul>
